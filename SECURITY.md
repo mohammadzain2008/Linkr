@@ -6,6 +6,7 @@ I release security updates for the following versions of Linkr:
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 2.0.x   | :white_check_mark: |
 | 1.0.x   | :white_check_mark: |
 | <1.0    | :x:                |
 
