@@ -4,8 +4,8 @@ import sys
 
 if __name__ == "__main__":
     
-    if len(sys.argv) < 4:
-        print("Usage: python linkr.py <compress/extract> <arguments>")
+    if len(sys.argv) < 3:
+        print("Usage: linkr <compress/extract> <arguments>")
         sys.exit(1)
     
     command = sys.argv[1]

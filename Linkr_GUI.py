@@ -13,12 +13,13 @@ def compress():
         return
     
     try:
-        cmd =  ['python', 'linkr.py', 'compress', package_name, folder_path] + [url.strip() for url in urls if url.strip()]
+        cmd =  ['linkr', 'compress', package_name, folder_path] + [url.strip() for url in urls if url.strip()]
         subprocess.run(cmd, check=True)
         messagebox.showinfo("Success", f"Package '{package_name}.linkr' created successfully.")
     
     except subprocess.CalledProcessError as e:
         messagebox.showerror("Error", f"Compression failed: {e}")
+        messagebox.showinfo("Info", "Ensure that linkr.exe is in your system PATH or in the same directory as this GUI.")
 
 
 def extract():
@@ -31,7 +32,7 @@ def extract():
         return
     
     try:
-        cmd = ['python', 'linkr.py', 'extract', file_path_2, folder_path_2]
+        cmd = ['linkr', 'extract', file_path_2, folder_path_2]
         if checksum_override:
             cmd.append('--override-checksum')
         subprocess.run(cmd, check=True)
@@ -39,6 +40,8 @@ def extract():
     
     except subprocess.CalledProcessError as e:
         messagebox.showerror("Error", f"Extraction failed: {e}")
+        messagebox.showinfo("Info", "Ensure that linkr.exe is in your system PATH or in the same directory as this GUI.")
+
 
 root =  tk.Tk()
 root.title(f"Linkr {VERSION}")
