@@ -61,4 +61,4 @@ def linkr_extractor(file_path, folder_path, checksum_override=False):
         for file in corrupted_files:
             colorizer.error(f"- {file}", header=False)
 
-    colorizer.success(f"\nExtraction of package '{package_name}' completed.")
+    colorizer.success(f"\nExtraction of package '{package_name}' completed.", header=False)
