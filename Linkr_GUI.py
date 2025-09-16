@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 import subprocess
-from global_var import VERSION
+from global_var import GUI_VERSION as VERSION
 
 def compress():
     package_name = entry_package.get().strip()

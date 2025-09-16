@@ -23,6 +23,7 @@ def linkr_compressor(package_name, folder_path, server_urls: list):
         # Initialize the final data structure
         final_data = {
             "PACKAGE": package_name,
+            "LINKR_ADDRESS": [url.rstrip('/') + f"/{package_name}.linkr" for url in server_urls],
             "TOTAL_SIZE": get_folder_size(folder_path),
             "FILES": []
         }
@@ -53,4 +54,8 @@ def linkr_compressor(package_name, folder_path, server_urls: list):
 
         # Write the final data to the .linkr file in JSON format
         json.dump(final_data, f, indent=4)
+    
     colorizer.success(f"Created {package_name}.linkr with {len(final_data['FILES'])} files.")
+    colorizer.warning(f"Make sure to upload {package_name}.linkr file to the same servers where the files are hosted for integrity verification to prevent tampering.\nPlace the file so that it is accessible at the following URLs:")
+    for url in final_data["LINKR_ADDRESS"]:
+        colorizer.info(f"- {url}", header=False)

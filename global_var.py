@@ -1,1 +1,2 @@
-VERSION = "2.0.0"
+CLI_VERSION = "2.0.1"
+GUI_VERSION = "2.0.0"

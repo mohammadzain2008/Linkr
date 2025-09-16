@@ -1,7 +1,10 @@
 import os
 import json
+import requests
 from resource_downloader import download_stream
 import colorizer
+from sha256 import sha256_checksum
+import hashlib
 
 def linkr_extractor(file_path, folder_path, checksum_override=False):
     """Extract files from a .linkr file to the specified folder."""
@@ -15,6 +18,42 @@ def linkr_extractor(file_path, folder_path, checksum_override=False):
     package_name = data.get("PACKAGE", "UnknownPackage")
     files = data.get("FILES", [])
     total_size = data.get("TOTAL_SIZE", 0) / (1024 * 1024)  # Convert to MB
+    linkr_address = data.get("LINKR_ADDRESS", [])
+
+    linkr_checksum = sha256_checksum(file_path)
+    for address in linkr_address:
+
+        try:
+            response = requests.get(address)
+
+            if response.status_code == 200:
+                sha256_hash = hashlib.sha256()
+
+                for chunk in response.iter_content(chunk_size=8192):
+                    sha256_hash.update(chunk)
+                
+                remote_checksum = sha256_hash.hexdigest()
+                
+                if remote_checksum == linkr_checksum:
+                    colorizer.success(f"Verified .linkr file with server at {address}")
+                
+                else:
+                    colorizer.error(f"Checksum mismatch with server at {address}. Expected {linkr_checksum}, got {remote_checksum}")
+                    colorizer.error("Aborting extraction due to checksum mismatch. Your .linkr file may have been tampered with which puts your system at a risk!")
+                    return
+            
+            if response.status_code == 404:
+                colorizer.warning(f"{package_name}.linkr file not found on server at {address}.")
+                colorizer.warning(f"Could not verify integrity of {package_name}.linkr file. If you wish to proceed, type 'proceed'.")
+                
+                user_input = input("Type 'proceed' to continue or anything else to abort: ").strip().lower()
+                
+                if user_input != 'proceed':
+                    colorizer.error("Aborting extraction.")
+                    return
+
+        except Exception as e:
+            colorizer.warning(f"Could not verify .linkr file with server at {address}: {e}")
 
     colorizer.info(f"\nExtracting package: {package_name} with {len(files)} files.")
     colorizer.info(f"Package size: {total_size:.2f} MB\n")

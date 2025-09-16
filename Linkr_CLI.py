@@ -1,11 +1,10 @@
-import sys
 from linkr_compressor import linkr_compressor
 from linkr_extractor import linkr_extractor
 
-from global_var import VERSION
+from global_var import CLI_VERSION as VERSION
 
 print("="*50)
-print(f"Welcome to Linkr v{VERSION}!")
+print(f"Linkr v{VERSION}!")
 print("Linkr is a tool to package folders into .linkr files with download links, and extract them later.")
 print("For more information, visit: https://github.com/mohammadzain2008/Linkr")
 print("="*50)
