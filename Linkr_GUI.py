@@ -21,7 +21,11 @@ def compress():
 
         if std_code_cmp == 0:
             messagebox.showinfo("Success", f"Package '{package_name}.linkr' created successfully.")
-
+            msg = f"Make sure to upload {package_name}.linkr file to the same servers where the files are hosted for integrity verification to prevent tampering.\nPlace the file so that it is accessible at the following URLs:"
+            for url in urls:
+                msg += f"\n- {url.rstrip('/')}/{package_name}.linkr"
+            messagebox.showinfo("Info", msg)
+        
         elif std_code_cmp == 100:
             messagebox.showerror("Error", f"The folder '{folder_path}' does not exist.")
     
