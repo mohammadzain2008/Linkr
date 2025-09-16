@@ -18,6 +18,11 @@ def get_folder_size(path: str) -> int:
 def linkr_compressor(package_name, folder_path, server_urls: list):
     """Compress a folder into a .linkr file with download links."""
 
+    if os.path.isdir(folder_path) == False:
+            colorizer.error(f"The folder '{folder_path}' does not exist.")
+            print(f"[STD_CODE] 100")
+            return 100
+    
     with open(package_name+'.linkr', 'w') as f, tqdm(total=get_folder_size(folder_path), unit='B', unit_scale=True, desc="Creating .linkr file", leave=True) as pbar:
 
         # Initialize the final data structure
@@ -29,6 +34,7 @@ def linkr_compressor(package_name, folder_path, server_urls: list):
         }
 
         # Walk through the folder and gather file info
+        
         for root, _, files in os.walk(folder_path):
 
             # Process each file
@@ -59,3 +65,6 @@ def linkr_compressor(package_name, folder_path, server_urls: list):
     colorizer.warning(f"Make sure to upload {package_name}.linkr file to the same servers where the files are hosted for integrity verification to prevent tampering.\nPlace the file so that it is accessible at the following URLs:")
     for url in final_data["LINKR_ADDRESS"]:
         colorizer.info(f"- {url}", header=False)
+    
+    print(f"[STD_CODE] 0")
+    return 0

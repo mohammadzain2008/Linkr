@@ -4,6 +4,7 @@ import subprocess
 from global_var import GUI_VERSION as VERSION
 
 def compress():
+
     package_name = entry_package.get().strip()
     folder_path = entry_folder.get().strip()
     urls = entry_urls.get("1.0", tk.END).strip().splitlines()   
@@ -14,8 +15,15 @@ def compress():
     
     try:
         cmd =  ['linkr', 'compress', package_name, folder_path] + [url.strip() for url in urls if url.strip()]
-        subprocess.run(cmd, check=True)
-        messagebox.showinfo("Success", f"Package '{package_name}.linkr' created successfully.")
+        cmp_return = subprocess.run(cmd, capture_output=True, text=True)
+
+        std_code_cmp = int(cmp_return.stdout.strip().splitlines()[-1].split()[1])
+
+        if std_code_cmp == 0:
+            messagebox.showinfo("Success", f"Package '{package_name}.linkr' created successfully.")
+
+        elif std_code_cmp == 100:
+            messagebox.showerror("Error", f"The folder '{folder_path}' does not exist.")
     
     except subprocess.CalledProcessError as e:
         messagebox.showerror("Error", f"Compression failed: {e}")
@@ -26,6 +34,7 @@ def extract():
     file_path_2 = entry_linkr.get().strip()
     folder_path_2 = entry_folder_2.get().strip()
     checksum_override = var_override.get()
+    integrity_check = var_integrity.get()
     
     if not file_path_2 or not folder_path_2:
         messagebox.showerror("Error", "All fields are required.")
@@ -35,8 +44,27 @@ def extract():
         cmd = ['linkr', 'extract', file_path_2, folder_path_2]
         if checksum_override:
             cmd.append('--override-checksum')
-        subprocess.run(cmd, check=True)
-        messagebox.showinfo("Success", f"Files extracted successfully to '{folder_path_2}'.")
+        if not integrity_check:
+            cmd.append('--no-integrity-check')
+
+        ext_return = subprocess.run(cmd, capture_output=True, text=True)
+
+        std_code_ext = int(ext_return.stdout.strip().splitlines()[-1].split()[1])
+
+        if std_code_ext == 0:
+            messagebox.showinfo("Success", f"Files extracted successfully to '{folder_path_2}'.")
+
+        elif std_code_ext == 101:
+            messagebox.showerror("Error", f"The file '{file_path_2}' does not exist.")
+
+        elif std_code_ext == 200:
+            messagebox.showerror("Error", "Checksum mismatch detected. Extraction aborted.")
+
+        elif std_code_ext == 201:
+            messagebox.showerror("Error", "Cannot verify integrity due to missing resource. Extraction aborted.")
+
+        elif std_code_ext == 300:
+            messagebox.showerror("Error", "Host unreachable. Please check your internet connection and try again.")
     
     except subprocess.CalledProcessError as e:
         messagebox.showerror("Error", f"Extraction failed: {e}")
@@ -96,24 +124,35 @@ btn_compress.grid(row=5, column=0, columnspan=3, pady=20)
 
 # Extract Tab
 ttk.Label(tab_extract, text="Extract Linkr File", style="SubHeading.TLabel").grid(row=0, column=0, columnspan=3, pady=10)
+
 ttk.Label(tab_extract, text="Linkr File:", style="CustomStyle.TLabel").grid(row=1, column=0, pady=5)
 entry_linkr = tk.Entry(tab_extract, width=50)
 entry_linkr.grid(row=1, column=1, pady=5)
+
 btn_browse_linkr = ttk.Button(tab_extract, style="CustomStyle.TButton", text="Browse", command=lambda: entry_linkr.insert(0, filedialog.askopenfilename(filetypes=[("Linkr files", "*.linkr")])))
 btn_browse_linkr.grid(row=1, column=2, padx=5, pady=5)
+
 ttk.Label(tab_extract, text="Destination:", style="CustomStyle.TLabel").grid(row=2, column=0, pady=5)
 entry_folder_2 = tk.Entry(tab_extract, width=50)
 entry_folder_2.grid(row=2, column=1, pady=5)
+
 btn_browse_folder_2 = ttk.Button(tab_extract, style="CustomStyle.TButton", text="Browse", command=lambda: entry_folder_2.insert(0, filedialog.askdirectory()))
 btn_browse_folder_2.grid(row=2, column=2, padx=5, pady=5)
+
 var_override = tk.BooleanVar()
 chk_override = ttk.Checkbutton(tab_extract, text="Override checksum errors", style="CustomStyle.TCheckbutton", variable=var_override)
 chk_override.grid(row=3, column=0, columnspan=3, pady=5)
+
+var_integrity = tk.BooleanVar(value=True)
+chk_integrity = ttk.Checkbutton(tab_extract, text="Perform integrity check on Linkr file", style="CustomStyle.TCheckbutton", variable=var_integrity)
+chk_integrity.grid(row=4, column=0, columnspan=3, pady=5)
+
 btn_extract = ttk.Button(tab_extract, style="Main.TButton", text="Extract", command=extract)
 btn_extract.config(width=20)
-btn_extract.grid(row=4, column=0, columnspan=3, pady=20)
+btn_extract.grid(row=5, column=0, columnspan=3, pady=20)
+
 copyright_label = ttk.Label(root, text="\u00A9 2025 Mohammad Zain", font=("Bookman Old Style", 10))
-copyright_label.grid(row=5, column=0, columnspan=3, pady=5)
+copyright_label.grid(row=6, column=0, columnspan=3, pady=5)
 
 
 root.mainloop()

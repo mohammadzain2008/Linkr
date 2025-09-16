@@ -28,6 +28,7 @@ elif choice == '2':
     file_path = input("Enter the path to the .linkr file: ")
     folder_path = input("Enter the path to the folder where files should be extracted: ")
     checksum_override = input("Override checksum errors? (y/n): ").strip().lower() == 'y'
-    linkr_extractor(file_path, folder_path, checksum_override)
+    integrity_check = input("Perform integrity check with server? (y/n): ").strip().lower() == 'y'
+    linkr_extractor(file_path, folder_path, checksum_override, integrity_check)
 
 input("\nPress Enter to exit...")

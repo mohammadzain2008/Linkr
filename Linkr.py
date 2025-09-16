@@ -20,4 +20,5 @@ if __name__ == "__main__":
         file_path = sys.argv[2]
         folder_path = sys.argv[3]
         checksum_override = '--override-checksum' in sys.argv
-        linkr_extractor(file_path, folder_path, checksum_override)
+        integrity_check = '--no-integrity-check' not in sys.argv
+        linkr_extractor(file_path, folder_path, checksum_override, integrity_check)

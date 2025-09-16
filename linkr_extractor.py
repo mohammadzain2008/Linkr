@@ -5,9 +5,15 @@ from resource_downloader import download_stream
 import colorizer
 from sha256 import sha256_checksum
 import hashlib
+from urllib.parse import urlparse
 
-def linkr_extractor(file_path, folder_path, checksum_override=False):
+def linkr_extractor(file_path, folder_path, checksum_override=False, integrity_check=True):
     """Extract files from a .linkr file to the specified folder."""
+
+    if not os.path.isfile(file_path):
+        colorizer.error(f"The linkr file '{file_path}' does not exist.")
+        print(f"[STD_CODE] 101")
+        return 101
 
     failed_downloads = []
     corrupted_files = []
@@ -17,6 +23,7 @@ def linkr_extractor(file_path, folder_path, checksum_override=False):
 
     package_name = data.get("PACKAGE", "UnknownPackage")
     files = data.get("FILES", [])
+    file_count = len(files)
     total_size = data.get("TOTAL_SIZE", 0) / (1024 * 1024)  # Convert to MB
     linkr_address = data.get("LINKR_ADDRESS", [])
 
@@ -40,23 +47,20 @@ def linkr_extractor(file_path, folder_path, checksum_override=False):
                 else:
                     colorizer.error(f"Checksum mismatch with server at {address}. Expected {linkr_checksum}, got {remote_checksum}")
                     colorizer.error("Aborting extraction due to checksum mismatch. Your .linkr file may have been tampered with which puts your system at a risk!")
-                    return
+                    print(f"[STD_CODE] 200")
+                    return 200
             
             if response.status_code == 404:
                 colorizer.warning(f"{package_name}.linkr file not found on server at {address}.")
-                colorizer.warning(f"Could not verify integrity of {package_name}.linkr file. If you wish to proceed, type 'proceed'.")
+                colorizer.warning(f"Could not verify integrity of {package_name}.linkr file.")
                 
-                user_input = input("Type 'proceed' to continue or anything else to abort: ").strip().lower()
-                
-                if user_input != 'proceed':
+                if integrity_check == True:
                     colorizer.error("Aborting extraction.")
-                    return
+                    print(f"[STD_CODE] 201")
+                    return 201
 
         except Exception as e:
             colorizer.warning(f"Could not verify .linkr file with server at {address}: {e}")
-
-    colorizer.info(f"\nExtracting package: {package_name} with {len(files)} files.")
-    colorizer.info(f"Package size: {total_size:.2f} MB\n")
 
     for file_info in files:
         urls = file_info.get("URLS", [])
@@ -64,6 +68,31 @@ def linkr_extractor(file_path, folder_path, checksum_override=False):
         size = file_info.get("SIZE", 0)
         expected_checksum = file_info.get("CHECKSUM", "")
 
+        fail_count = 0
+        for url in urls:
+            parsed_url = urlparse(url)
+            domain = f"{parsed_url.scheme}://{parsed_url.netloc}"
+
+            try:
+                requests.get(domain, timeout=5)
+
+            except Exception as e:
+                colorizer.warning(f"Could not reach server at {domain}: {e}")
+                urls.remove(url)
+
+        if len(urls) == 0:
+            colorizer.error(f"No reachable URLs for {destination}. Skipping download.")
+            fail_count += 1
+            failed_downloads.append(destination)
+    
+        if fail_count == file_count:
+            colorizer.error("All download URLs are unreachable. Aborting extraction.")
+            print(f"[STD_CODE] 300")
+            return 300
+        
+        colorizer.info(f"\nExtracting package: {package_name} with {len(files)} files.")
+        colorizer.info(f"Package size: {total_size:.4f} MB\n")
+        
         dest_path = os.path.join(folder_path, destination)
         dest_dir = os.path.dirname(dest_path)
 
@@ -101,3 +130,5 @@ def linkr_extractor(file_path, folder_path, checksum_override=False):
             colorizer.error(f"- {file}", header=False)
 
     colorizer.success(f"\nExtraction of package '{package_name}' completed.", header=False)
+    print(f"[STD_CODE] 0")
+    return 0
