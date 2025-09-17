@@ -28,3 +28,6 @@ venv/
 # IDE/editor settings
 .vscode/
 .idea/
+
+# Inno Setup files
+*.iss
