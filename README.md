@@ -14,13 +14,14 @@
 <hr>
 <div align='center'>
 
-[Introduction](#introduction) • [Installation](#installation) • [Usage](#usage)
+[Introduction](#introduction)  •  [Installation](#installation)  •  [Usage](#usage)  •  [Releases](https://github.com/mohammadzain2008/Linkr/releases/)
 
 </div>
 
 <div>
 
 ## Table of Contents
+
 - [Introduction](#introduction)
     - [A scenario where Linkr proves useful](#a-scenario-where-linkr-proves-useful)
     - [Why Linkr is better?](#why-linkr-is-better)
@@ -35,7 +36,8 @@
     - [Linkr CLI](#linkr-cli)
         - [Creating `linkr` manifests](#creating-linkr-manifests)
         - [Extracting `linkr` manifests](#extracting-linkr-manifests`)
-</div>
+    - [Linkr GUI](#linkr-gui)
+    - [Linkr Terminal Command](#linkr-terminal-command)
 
 ## Introduction
 
@@ -209,3 +211,20 @@ This completes the compression process.
     If enabled, your linkr manifest will be compared with the one created by the author. It is highly recommended that you enable this. If the integrity check fails, the extraction process will be aborted.
 
 You shall now be able to find your downloaded files inside the destination folder.
+
+### Linkr GUI
+<hr>
+
+Using Linkr GUI is pretty straightforward as the interface is much more user-friendly than the CLI. However, if you plan on using the GUI, make sure that `linkr.exe` is in the same location as that of the GUI application.
+
+### Linkr Terminal Command
+<hr>
+
+If you are inside the directory where `linkr.exe` is present, you can directly run Linkr from the command line by entering the following commands from `compress` and `extract` respectively.
+
+```bash
+linkr compress <package_name> <folder_path> <server_url_1> <server_url_2> ...
+linkr extract <file_path> <folder_path> --override-checksum --no-integrity-check
+```
+
+If you don't want to override checksum errors, then remove the `--override-checksum` flag. If you want to perform linkr manifest integrity check, then remove the `--no-integrity-check` flag.
