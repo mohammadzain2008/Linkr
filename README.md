@@ -152,6 +152,7 @@ A key part of the Linkr supply chain is hosting files. Thus, it is essential to 
 
 ### Different ways of using Linkr
 <hr>
+
 After installing Linkr using one of the two methods mentioned above, you can now use the software. There are three ways to use Linkr:
 - **Linkr CLI** (`LinkrCLI-v2-0-1.exe`)
 - **Linkr GUI** (`LinkrGUI-v2-0-1.exe`)
@@ -159,6 +160,7 @@ After installing Linkr using one of the two methods mentioned above, you can now
 
 ### Linkr CLI
 <hr>
+
 **Linkr CLI** is a standalone application and does not need any other dependencies to run. Once started, the interface prompts you to choose between two option: **compress** and **extract**.
 - **Compress** is used to create linkr manifests of a directory.
 - **Extract** downloads the directory from a linkr manifest.
