@@ -1,7 +1,9 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 import subprocess
+from PIL import Image, ImageTk
 from global_var import GUI_VERSION as VERSION
+from global_var import SPLASH_BANNER
 
 def compress():
 
@@ -75,88 +77,134 @@ def extract():
         messagebox.showinfo("Info", "Ensure that linkr.exe is in your system PATH or in the same directory as this GUI.")
 
 
-root =  tk.Tk()
-root.title(f"Linkr {VERSION}")
-root.geometry("640x625")
+def main_app():
+    """Main application window."""
 
-style = ttk.Style()
-style.configure("CustomStyle.TLabel", font=("Bookman Old Style", 11))
+    splash.destroy()
 
-heading = ttk.Style()
-heading.configure("Heading.TLabel", font=("Bookman Old Style", 16, "bold"))
+    root =  tk.Tk()
+    root.title(f"Linkr {VERSION}")
+    root.geometry("640x625")
 
-h2 = ttk.Style()
-h2.configure("SubHeading.TLabel", font=("Bookman Old Style", 14, "bold"))
+    global entry_package, entry_folder, entry_urls
+    global entry_linkr, entry_folder_2, var_override, var_integrity
 
-button_style = ttk.Style()
-button_style.configure("CustomStyle.TButton", font=("Bookman Old Style", 10))
+    style = ttk.Style()
+    style.configure("CustomStyle.TLabel", font=("Bookman Old Style", 11))
 
-main_btn_style = ttk.Style()
-main_btn_style.configure("Main.TButton", font=("Bookman Old Style", 12, "bold"), padding=10)
+    heading = ttk.Style()
+    heading.configure("Heading.TLabel", font=("Bookman Old Style", 16, "bold"))
 
-chk_style = ttk.Style()
-chk_style.configure("CustomStyle.TCheckbutton", font=("Bookman Old Style", 11))
+    h2 = ttk.Style()
+    h2.configure("SubHeading.TLabel", font=("Bookman Old Style", 14, "bold"))
 
-ttk.Label(root, text="Linkr - Package and Extract Files", style="Heading.TLabel").grid(row=0, column=0, columnspan=3, pady=10)
-tab_control = ttk.Notebook(root)
-tab_compress = tk.Frame(tab_control)
-tab_extract = tk.Frame(tab_control)
-tab_control.add(tab_compress, text="Compress")
-tab_control.add(tab_extract, text="Extract")
-tab_control.grid(row=1, column=0, columnspan=3, padx=10, pady=10)
+    button_style = ttk.Style()
+    button_style.configure("CustomStyle.TButton", font=("Bookman Old Style", 10))
 
-# Compress Tab
-ttk.Label(tab_compress, text="Compress Folder", style="SubHeading.TLabel").grid(row=0, column=0, columnspan=3, pady=10)
-ttk.Label(tab_compress, text="Package Name:", style="CustomStyle.TLabel").grid(row=1, column=0, pady=5)
-entry_package = tk.Entry(tab_compress, width=50)
-entry_package.grid(row=1, column=1, pady=5)
+    main_btn_style = ttk.Style()
+    main_btn_style.configure("Main.TButton", font=("Bookman Old Style", 12, "bold"), padding=10)
 
-ttk.Label(tab_compress, text="Package Location:", style="CustomStyle.TLabel").grid(row=2, column=0, pady=5)
-entry_folder = tk.Entry(tab_compress, width=50)
-entry_folder.grid(row=2, column=1, pady=5)
+    chk_style = ttk.Style()
+    chk_style.configure("CustomStyle.TCheckbutton", font=("Bookman Old Style", 11))
 
-btn_browse_folder = ttk.Button(tab_compress, text="Browse", style="CustomStyle.TButton", command=lambda: entry_folder.insert(0, filedialog.askdirectory()))
-btn_browse_folder.grid(row=2, column=2, padx=5, pady=5)
+    ttk.Label(root, text="Linkr - Package and Extract Files", style="Heading.TLabel").grid(row=0, column=0, columnspan=3, pady=10)
+    tab_control = ttk.Notebook(root)
+    tab_compress = tk.Frame(tab_control)
+    tab_extract = tk.Frame(tab_control)
+    tab_control.add(tab_compress, text="Compress")
+    tab_control.add(tab_extract, text="Extract")
+    tab_control.grid(row=1, column=0, columnspan=3, padx=10, pady=10)
 
-ttk.Label(tab_compress, text="Server URLs (one per line):", style="CustomStyle.TLabel").grid(row=3, column=0, pady=5)
-entry_urls = tk.Text(tab_compress, width=50, height=10)
-entry_urls.grid(row=4, column=0, columnspan=3, pady=5)
+    # Compress Tab
+    ttk.Label(tab_compress, text="Compress Folder", style="SubHeading.TLabel").grid(row=0, column=0, columnspan=3, pady=10)
+    
+    ttk.Label(tab_compress, text="Package Name:", style="CustomStyle.TLabel").grid(row=1, column=0, pady=5)
+    entry_package = tk.Entry(tab_compress, width=50)
+    entry_package.grid(row=1, column=1, pady=5)
 
-btn_compress = ttk.Button(tab_compress, style="Main.TButton", text="Compress", command=compress)
-btn_compress.config(width=20)
-btn_compress.grid(row=5, column=0, columnspan=3, pady=20)
+    ttk.Label(tab_compress, text="Package Location:", style="CustomStyle.TLabel").grid(row=2, column=0, pady=5)
+    entry_folder = tk.Entry(tab_compress, width=50)
+    entry_folder.grid(row=2, column=1, pady=5)
 
-# Extract Tab
-ttk.Label(tab_extract, text="Extract Linkr File", style="SubHeading.TLabel").grid(row=0, column=0, columnspan=3, pady=10)
+    btn_browse_folder = ttk.Button(tab_compress, text="Browse", style="CustomStyle.TButton", command=lambda: entry_folder.insert(0, filedialog.askdirectory()))
+    btn_browse_folder.grid(row=2, column=2, padx=5, pady=5)
 
-ttk.Label(tab_extract, text="Linkr File:", style="CustomStyle.TLabel").grid(row=1, column=0, pady=5)
-entry_linkr = tk.Entry(tab_extract, width=50)
-entry_linkr.grid(row=1, column=1, pady=5)
+    ttk.Label(tab_compress, text="Server URLs (one per line):", style="CustomStyle.TLabel").grid(row=3, column=0, pady=5)
+    entry_urls = tk.Text(tab_compress, width=50, height=10)
+    entry_urls.grid(row=4, column=0, columnspan=3, pady=5)
 
-btn_browse_linkr = ttk.Button(tab_extract, style="CustomStyle.TButton", text="Browse", command=lambda: entry_linkr.insert(0, filedialog.askopenfilename(filetypes=[("Linkr files", "*.linkr")])))
-btn_browse_linkr.grid(row=1, column=2, padx=5, pady=5)
+    btn_compress = ttk.Button(tab_compress, style="Main.TButton", text="Compress", command=compress)
+    btn_compress.config(width=20)
+    btn_compress.grid(row=5, column=0, columnspan=3, pady=20)
 
-ttk.Label(tab_extract, text="Destination:", style="CustomStyle.TLabel").grid(row=2, column=0, pady=5)
-entry_folder_2 = tk.Entry(tab_extract, width=50)
-entry_folder_2.grid(row=2, column=1, pady=5)
+    # Extract Tab
+    ttk.Label(tab_extract, text="Extract Linkr File", style="SubHeading.TLabel").grid(row=0, column=0, columnspan=3, pady=10)
 
-btn_browse_folder_2 = ttk.Button(tab_extract, style="CustomStyle.TButton", text="Browse", command=lambda: entry_folder_2.insert(0, filedialog.askdirectory()))
-btn_browse_folder_2.grid(row=2, column=2, padx=5, pady=5)
+    ttk.Label(tab_extract, text="Linkr File:", style="CustomStyle.TLabel").grid(row=1, column=0, pady=5)
+    entry_linkr = tk.Entry(tab_extract, width=50)
+    entry_linkr.grid(row=1, column=1, pady=5)
 
-var_override = tk.BooleanVar()
-chk_override = ttk.Checkbutton(tab_extract, text="Override checksum errors", style="CustomStyle.TCheckbutton", variable=var_override)
-chk_override.grid(row=3, column=0, columnspan=3, pady=5)
+    btn_browse_linkr = ttk.Button(tab_extract, style="CustomStyle.TButton", text="Browse", command=lambda: entry_linkr.insert(0, filedialog.askopenfilename(filetypes=[("Linkr files", "*.linkr")])))
+    btn_browse_linkr.grid(row=1, column=2, padx=5, pady=5)
 
-var_integrity = tk.BooleanVar(value=True)
-chk_integrity = ttk.Checkbutton(tab_extract, text="Perform integrity check on Linkr file", style="CustomStyle.TCheckbutton", variable=var_integrity)
-chk_integrity.grid(row=4, column=0, columnspan=3, pady=5)
+    ttk.Label(tab_extract, text="Destination:", style="CustomStyle.TLabel").grid(row=2, column=0, pady=5)
+    entry_folder_2 = tk.Entry(tab_extract, width=50)
+    entry_folder_2.grid(row=2, column=1, pady=5)
 
-btn_extract = ttk.Button(tab_extract, style="Main.TButton", text="Extract", command=extract)
-btn_extract.config(width=20)
-btn_extract.grid(row=5, column=0, columnspan=3, pady=20)
+    btn_browse_folder_2 = ttk.Button(tab_extract, style="CustomStyle.TButton", text="Browse", command=lambda: entry_folder_2.insert(0, filedialog.askdirectory()))
+    btn_browse_folder_2.grid(row=2, column=2, padx=5, pady=5)
 
-copyright_label = ttk.Label(root, text="\u00A9 2025 Mohammad Zain", font=("Bookman Old Style", 10))
-copyright_label.grid(row=6, column=0, columnspan=3, pady=5)
+    var_override = tk.BooleanVar()
+    chk_override = ttk.Checkbutton(tab_extract, text="Override checksum errors", style="CustomStyle.TCheckbutton", variable=var_override)
+    chk_override.grid(row=3, column=0, columnspan=3, pady=5)
 
+    var_integrity = tk.BooleanVar(value=True)
+    chk_integrity = ttk.Checkbutton(tab_extract, text="Perform integrity check on Linkr file", style="CustomStyle.TCheckbutton", variable=var_integrity)
+    chk_integrity.grid(row=4, column=0, columnspan=3, pady=5)
 
-root.mainloop()
+    btn_extract = ttk.Button(tab_extract, style="Main.TButton", text="Extract", command=extract)
+    btn_extract.config(width=20)
+    btn_extract.grid(row=5, column=0, columnspan=3, pady=20)
+
+    copyright_label = ttk.Label(root, text="\u00A9 2025 Mohammad Zain", font=("Bookman Old Style", 10))
+    copyright_label.grid(row=6, column=0, columnspan=3, pady=5)
+
+    root.mainloop()
+
+# Splash screen
+
+splash = tk.Tk()
+splash.overrideredirect(True)
+
+# Loading the splash image
+image = Image.open(SPLASH_BANNER)
+
+# Resizing the image if it's too large
+downscale_factor = 4
+custom_width = int(1920 / downscale_factor)
+custom_height = int(1080 / downscale_factor)
+
+image = image.resize((custom_width, custom_height), Image.LANCZOS)
+
+photo = ImageTk.PhotoImage(image)
+
+splash_label = ttk.Label(splash, image=photo, borderwidth=0)
+splash_label.pack(expand=True)
+
+# Center the splash screen on the screen
+screen_width = splash.winfo_screenwidth()
+screen_height = splash.winfo_screenheight()
+
+border = 10
+img_width, img_height = (custom_width + border, custom_height + border)
+
+x = (screen_width - img_width) // 2
+y = (screen_height - img_height) // 2
+splash.geometry(f"{img_width}x{img_height}+{x}+{y}")
+
+# Keep the splash on top
+splash.lift()
+splash.attributes("-topmost", True)
+splash.after(3000, main_app)
+
+splash.mainloop()
