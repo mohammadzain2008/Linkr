@@ -59,8 +59,8 @@ def linkr_extractor(file_path, folder_path, checksum_override=False, integrity_c
                     print(f"[STD_CODE] 201")
                     return 201
 
-        except Exception as e:
-            colorizer.warning(f"Could not verify .linkr file with server at {address}: {e}")
+        except Exception:
+            colorizer.warning(f"Could not verify .linkr file with server at {address}")
 
     for file_info in files:
         urls = file_info.get("URLS", [])
@@ -76,8 +76,8 @@ def linkr_extractor(file_path, folder_path, checksum_override=False, integrity_c
             try:
                 requests.get(domain, timeout=5)
 
-            except Exception as e:
-                colorizer.warning(f"Could not reach server at {domain}: {e}")
+            except Exception:
+                colorizer.warning(f"Could not reach server at {domain}.")
                 urls.remove(url)
 
         if len(urls) == 0:

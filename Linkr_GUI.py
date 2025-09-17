@@ -31,8 +31,8 @@ def compress():
         elif std_code_cmp == 100:
             messagebox.showerror("Error", f"The folder '{folder_path}' does not exist.")
     
-    except subprocess.CalledProcessError as e:
-        messagebox.showerror("Error", f"Compression failed: {e}")
+    except subprocess.CalledProcessError:
+        messagebox.showerror("Error", f"Compression failed.")
         messagebox.showinfo("Info", "Ensure that linkr.exe is in your system PATH or in the same directory as this GUI.")
 
 
@@ -72,8 +72,8 @@ def extract():
         elif std_code_ext == 300:
             messagebox.showerror("Error", "Host unreachable. Please check your internet connection and try again.")
     
-    except subprocess.CalledProcessError as e:
-        messagebox.showerror("Error", f"Extraction failed: {e}")
+    except subprocess.CalledProcessError:
+        messagebox.showerror("Error", f"Extraction failed.")
         messagebox.showinfo("Info", "Ensure that linkr.exe is in your system PATH or in the same directory as this GUI.")
 
 
