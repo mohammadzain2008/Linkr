@@ -6,8 +6,9 @@ I release security updates for the following versions of Linkr:
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 2.0.x   | :white_check_mark: |
-| 1.0.x   | :white_check_mark: |
+| 2.1.x   | :white_check_mark: |
+| 2.0.x   | :x:                |
+| 1.0.x   | :x:                |
 | <1.0    | :x:                |
 
 ## Reporting a Vulnerability
@@ -15,7 +16,8 @@ I release security updates for the following versions of Linkr:
 If you discover a security vulnerability in Linkr, please **do not open a public issue**.  
 Instead, contact me through the following:
 
-- Email: [mohammad.zain.abideen.2008@gmail.com]
+- Create a **Security Advisory** in the **Security Tab**
+- You can also email me: [mohammad.zain.abideen.2008@gmail.com]
 
 Please include as much detail as possible:
 - A description of the issue  
