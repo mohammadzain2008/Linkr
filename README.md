@@ -11,7 +11,9 @@
 ![GitHub milestone details](https://img.shields.io/github/milestones/progress-percent/mohammadzain2008/Linkr/1)
 
 </div>
+
 <hr>
+
 <div align='center'>
 
 [Introduction](#introduction)  •  [Installation](#installation)  •  [Usage](#usage)  •  [Releases](https://github.com/mohammadzain2008/Linkr/releases/)
@@ -87,9 +89,9 @@ All dependencies are mentioned in the `requirements.txt` file.
 For regular users, you can download Linkr in one of two ways. **As of September 17, 2025, Linkr does not have binaries for macOS and Linux.**
 
 1. Using **GitHub CLI**
-    ```bash
-    gh release download v2.0.1 --repo mohammadzain2008/Linkr
-    ```
+```bash
+gh release download v2.0.1 --repo mohammadzain2008/Linkr
+```
 
 2. Using **GitHub**
 
@@ -110,9 +112,9 @@ For regular users, you can download Linkr in one of two ways. **As of September 
 - After signing up, you will get an `authtoken` which you can find in your account settings.
 - Open command prompt and enter the following:
 
-    ```bash
-    ngrok config add-authtoken <your-authtoken>
-    ```
+```bash
+ngrok config add-authtoken <your-authtoken>
+```
 
 - Once you get a confirmation message, you are good to go.
 
@@ -123,30 +125,33 @@ A key part of the Linkr supply chain is hosting files. Thus, it is essential to 
 - Once you are there, in the search on the top, type `cmd`. This will open the command prompt in that directory.
 - Now, enter the command given below.
 
-    ```bash
-    python -m http.server 8080
-    ```
+```bash
+python -m http.server 8080
+```
 
     You should see the following message in the terminal if the process went as planned.
 
-    ```bash
-    Serving HTTP on :: port 8080 (http://[::]:8080/) ...
-    ```
+```bash
+Serving HTTP on :: port 8080 (http://[::]:8080/) ...
+```
+
 - Now, we need to expose our local web server so that anybody on the internet can access it. This can be achieved using **ngrok**. Open another command prompt window from anywhere and type the following:
 
-    ```bash
-    ngrok http 8080
-    ```
+```bash
+ngrok http 8080
+```
+
 - You should see the following on your screen:
-    ```bash
-    Session Status                online
-    Account                       <your-name> (Plan: Free)
-    Update                        update available (version 3.28.0, Ctrl-U to update)
-    Version                       3.24.0-msix
-    Region                        India (in)
-    Web Interface                 http://127.0.0.1:4040
-    Forwarding                    https://0a4aeebb8c3a.ngrok-free.app -> http://localhost:8080
-    ```
+
+```bash
+Session Status                online
+Account                       <your-name> (Plan: Free)
+Update                        update available (version 3.28.0, Ctrl-U to update)
+Version                       3.24.0-msix
+Region                        India (in)
+Web Interface                 http://127.0.0.1:4040
+Forwarding                    https://0a4aeebb8c3a.ngrok-free.app -> http://localhost:8080
+```
 
     The useful thing here is the _Forwarding_, this is the address where your directory is hosted i.e. `https://0a4aeebb8c3a.ngrok-free.app`.
 
@@ -174,7 +179,7 @@ Let's first learn to create linkr manifests.
 
 If you did the above correctly, you will get the following message:
 
-```text
+```bash
 [SUCCESS]: Created Package.linkr with 1 files.
 ```
 
@@ -182,7 +187,7 @@ This means that your `Package.linkr` file was created and is ready for distribut
 
 You will also get another message:
 
-```text
+```bash
 [WARNING]: Make sure to upload Sample.linkr file to the same servers where the files are hosted for integrity verification to prevent tampering.
 Place the file so that it is accessible at the following URLs:
 - http://example.com/Sample.linkr
@@ -198,14 +203,14 @@ This completes the compression process.
 2. Now, enter the absolute/relative path to the `.linkr` file.
 3. Enter the name of the destination folder where you want the files to be placed.
 4. You will now see the prompt:
-    ```bash
-    Override checksum errors? (y/n):
-    ```
+```bash
+Override checksum errors? (y/n):
+```
     If you enable this, then any file that has been tampered with will not be downloaded. If you disable this, tampered files will not be deleted, but you will still be warned about them.
 5. Now, you will see the prompt:
-    ```bash
-    Perform integrity check with server? (y/n):
-    ```
+```bash
+Perform integrity check with server? (y/n):
+```
     If enabled, your linkr manifest will be compared with the one created by the author. It is highly recommended that you enable this. If the integrity check fails, the extraction process will be aborted.
 
 You shall now be able to find your downloaded files inside the destination folder.
