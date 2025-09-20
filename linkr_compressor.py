@@ -15,6 +15,14 @@ def get_folder_size(path: str) -> int:
                 total += os.path.getsize(fp)
     return total
 
+def get_file_count(path: str) -> int:
+    """Count the total number of files in a folder."""
+
+    count = 0
+    for _, _, filenames in os.walk(path):
+        count += len(filenames)
+    return count
+
 def linkr_compressor(package_name, folder_path, server_urls: list):
     """Compress a folder into a .linkr file with download links."""
 
@@ -23,7 +31,7 @@ def linkr_compressor(package_name, folder_path, server_urls: list):
             print(f"[STD_CODE] 100")
             return 100
     
-    with open(package_name+'.linkr', 'w') as f, tqdm(total=get_folder_size(folder_path), unit='B', unit_scale=True, desc="Creating .linkr file", leave=True) as pbar:
+    with open(package_name+'.linkr', 'w') as f, tqdm(total=get_file_count(folder_path), unit='Files', unit_scale=True, desc=f"Creating {package_name}.linkr", leave=True) as pbar:
 
         # Initialize the final data structure
         final_data = {
@@ -46,14 +54,13 @@ def linkr_compressor(package_name, folder_path, server_urls: list):
                 download_links = [f"{server_url}/{relative_path}" for server_url in server_urls]
 
                 # Update progress bar
-                file_size = os.path.getsize(file_path)
-                pbar.update(file_size)
+                pbar.update(1)
 
                 # Create file info dictionary
                 file_info = {
                     "URLS": download_links,
                     "DESTINATION": relative_path,
-                    "SIZE": file_size,
+                    "SIZE": os.path.getsize(file_path),
                     "CHECKSUM": sha256_checksum(file_path)
                 }
                 final_data["FILES"].append(file_info)
