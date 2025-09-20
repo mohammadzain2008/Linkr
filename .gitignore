@@ -32,3 +32,6 @@ venv/
 # Inno Setup files
 scripts/
 *.iss
+
+# Website files
+Linkr-Site/
