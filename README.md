@@ -8,7 +8,7 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/mohammadzain2008/Linkr)
 ![GitHub commits since latest release](https://img.shields.io/github/commits-since/mohammadzain2008/Linkr/latest)
 ![GitHub last commit](https://img.shields.io/github/last-commit/mohammadzain2008/Linkr)
-![GitHub milestone details](https://img.shields.io/github/milestones/progress-percent/mohammadzain2008/Linkr/1)
+![GitHub milestone details](https://img.shields.io/github/milestones/progress-percent/mohammadzain2008/Linkr/2)
 
 </div>
 
