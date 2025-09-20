@@ -62,6 +62,9 @@ def linkr_extractor(file_path, folder_path, checksum_override=False, integrity_c
         except Exception:
             colorizer.warning(f"Could not verify .linkr file with server at {address}")
 
+    colorizer.info(f"\nExtracting package: {package_name} with {len(files)} files.")
+    colorizer.info(f"Package size: {total_size:.4f} MB\n")
+    
     for file_info in files:
         urls = file_info.get("URLS", [])
         destination = file_info.get("DESTINATION", "")
@@ -89,9 +92,6 @@ def linkr_extractor(file_path, folder_path, checksum_override=False, integrity_c
             colorizer.error("All download URLs are unreachable. Aborting extraction.")
             print(f"[STD_CODE] 300")
             return 300
-        
-        colorizer.info(f"\nExtracting package: {package_name} with {len(files)} files.")
-        colorizer.info(f"Package size: {total_size:.4f} MB\n")
         
         dest_path = os.path.join(folder_path, destination)
         dest_dir = os.path.dirname(dest_path)
