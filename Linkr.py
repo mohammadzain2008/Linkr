@@ -5,7 +5,22 @@ import sys
 if __name__ == "__main__":
     
     if len(sys.argv) < 3:
-        print("Usage: linkr <compress/extract> <arguments>")
+        print("""\033[35mTo compress directories:\033[0m
+              
+        \033[33mlinkr compress\033[0m \033[36m<package-name> <directory-location> <server-urls>\033[0m
+          
+\033[35mTo extract files from a manifest:\033[0m
+              
+        \033[33mlinkr extract\033[0m \033[36m<linkr-manifest> <destination>\033[0m
+
+\033[35mThe following flags are available with the\033[0m \033[32mextract\033[0m \033[35mfunction:\033[0m
+              
+        \033[36m--override-checksum:\033[0m
+              Do not delete corrupt files.
+
+        \033[36m--no-integrity-check:\033[0m
+              Do not abort the package extraction process if the integrity of the manifest could not be verified.""")
+
         sys.exit(1)
     
     command = sys.argv[1]
